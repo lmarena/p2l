@@ -233,7 +233,7 @@ model_configs:
         type: openai
 ```
 
-Notice how the system prompt, temperature, and top_p are defined. These replace how the models are served on Chatbot Arena. P2L is trained with the expectation that the models are running on this configuration. Therefore, for the most reliable results, we recommend sticking to the configs shown in [`example_config.yaml`](./route/example_config.yaml), though alternatives should still function well.
+Notice how the system prompt, temperature, and top_p are defined. These replicate how the models are served on Chatbot Arena. P2L is trained with the expectation that the models are running on this configuration. Therefore, for the most reliable results, we recommend sticking to the configs shown in [`example_config.yaml`](./route/example_config.yaml), though alternatives should still function well.
 
 Additionally, we allow for adjustment of the `cost` parameter. One natural choice is just cost per output token, however more accuracte cost estimates are better. For example, the costs in [`example_config.yaml`](./route/example_config.yaml) are calculated to be proportional to the formula `cost_per_output_token * average_output_tokens_per_response`.
 
