@@ -293,7 +293,7 @@ def BA_loss(
 
 
 @register_loss("bag")
-def BAG_loss(
+def GRK_loss(
     head_output: HeadOutputs, labels: Dict, weights: torch.Tensor = None, **kwargs
 ):
     # labels are (winner_idx, loser_idx, tie_indicator (0 for no tie, 1 for tie, 2 for tie both bad))

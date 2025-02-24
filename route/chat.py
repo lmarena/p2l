@@ -188,9 +188,13 @@ class OpenAIChatHandler(BaseChatHandler):
 
     def _skip(chunk: ChatCompletionChunk) -> bool:
 
-        content = chunk.choices[0].delta.content
+        try:
 
-        return content == "" or content == None
+            content = chunk.choices[0].delta.content
+
+            return content == "" or content == None
+        except Exception as e:
+            return True
 
     @classmethod
     def generate_stream(
