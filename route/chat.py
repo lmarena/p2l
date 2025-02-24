@@ -275,10 +275,12 @@ class OpenaiReasoningChatHandler(OpenAIChatHandler):
         max_tokens: int | None,
         stream=False,
     ) -> ChatCompletion | Iterator[ChatCompletionChunk]:
+        
+        extra_field = model_config.get_extra_fields()
 
         # No max tokens argument
         completion = client.chat.completions.create(
-            model=model_config.get_name(), messages=messages, stream=stream
+            model=model_config.get_name(), messages=messages, stream=stream, reasoning_effort=extra_field.get("reasoning_effort", openai.NOT_GIVEN),
         )
 
         return completion
