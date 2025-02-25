@@ -242,6 +242,7 @@ class EndpointP2LRouter(BaseRouter):
 
 
 @register("bag-endpoint")
+@register("grk-endpoint")
 class EndpointP2LRouter(BaseRouter):
     def __init__(
         self,
