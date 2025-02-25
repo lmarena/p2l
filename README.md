@@ -29,6 +29,7 @@ Furthermore, our findings suggest that P2L's ability to produce prompt-specific 
   - [Inferencing a P2L Model](#inferencing-a-p2l-model)
   - [AutoEval Suite](#autoeval-suite)
     - [Params](#params)
+  - [Citation](#citation)
 
 
 ## Environment Setup
@@ -101,10 +102,10 @@ Before getting started, make sure you have followed the steps in [Serving Setup]
 | `--workers WORKERS` | - | Number of endpoint workers (each will hold a model instance). |
 | `--cuda, --no-cuda` | - | Flag to enable using a GPU to host the model. Flag is true by default. |
 
-For example, to run p2el/Qwen2.5-7B-bag-01112025, which is a Qwen2 based "bag" model, which has head type `rk`, we would run:
+For example, to run lmarena-ai/p2l-7b-grk-02222025, which is a Qwen2 based "grk" model, which has head type `rk`, we would run:
 
 ```bash
-python -m p2l.endpoint --model-path p2el/Qwen2.5-7B-bag-01112025 --model-type qwen2 --head-type rk --api-key <your-desired-api-key>
+python -m p2l.endpoint --model-path lmarena-ai/p2l-7b-grk-02222025 --model-type qwen2 --head-type rk --api-key <your-desired-api-key>
 ```
 
 This code will host the model running on 1 worker and host 0.0.0.0 and port 10250 by default. Reload will be enabled meaning code changes will reload the endpoint. Note that by default the endpoint expects to load the model onto a GPU, however by specifying `--no-cuda` you can run this on CPU only, which may work for smaller P2L models.
@@ -178,7 +179,7 @@ Serve an OpenAI compatible router with `python -m route.openai_server`. The avai
 |--------|-----------|-------------|
 | `--help` | `-h` | Show this help message and exit. |
 | `--config CONFIG` | `-c CONFIG` | Path to the configuration file. |
-| `--router-type ROUTER_TYPE` | - | Type of the router to use. Available types are `bt-endpoint` and `bag-endpoint`.|
+| `--router-type ROUTER_TYPE` | - | Type of the router to use. Available types are `bt-endpoint` and `grk-endpoint`.|
 | `--router-model-name ROUTER_MODEL_NAME` | - | Name of the router model. |
 | `--router-model-endpoint ROUTER_MODEL_ENDPOINT` | - | Endpoint URL for the router model. |
 | `--router-api-key ROUTER_API_KEY` | - | API key for the router authentication. |
@@ -194,7 +195,7 @@ Serve an OpenAI compatible router with `python -m route.openai_server`. The avai
 First, similar to above [above](#serving-p2l), we need to start serving a P2L model, this time Bradley-Terry based. To do this, let's run:
 
 ```bash
-python -m p2l.endpoint --model-path p2el/Qwen2.5-7B-bt-01132025 --model-type qwen2 --head-type bt --api-key <your-desired-api-key>
+python -m p2l.endpoint --model-path lmarena-ai/p2l-7b-bt-01132025 --model-type qwen2 --head-type bt --api-key <your-desired-api-key>
 ```
 
 Now, we need to configure a routing config file. This will specify the available models and inference details for the router.
@@ -259,13 +260,13 @@ P2L has a class of "Grounded RK" models. These models produces coefficents such 
 First, start up the P2L endpoint:
 
 ```bash
-python -m p2l.endpoint --model-path p2el/Qwen2.5-7B-bag-01112025 --model-type qwen2 --head-type rk --api-key <your-desired-api-key>
+python -m p2l.endpoint --model-path lmarena-ai/p2l-7b-grk-02222025 --model-type qwen2 --head-type rk --api-key <your-desired-api-key>
 ```
 
 Then start up the router server:
 
 ```bash
-python -m route.openai_server --config config.yaml --router-type bag-endpoint --router-model-endpoint http://0.0.0.0:10250 --router-api-key <your-api-key> --cost-optimizer simple-lp --api-key <your-endpoint-api-key>
+python -m router.openai_server --config config.yaml --router-type grk-endpoint --router-model-endpoint http://0.0.0.0:10250 --router-api-key <your-api-key> --cost-optimizer simple-lp --api-key <your-endpoint-api-key>
 ```
 
 ## Calling the OpenAI Compatible Router

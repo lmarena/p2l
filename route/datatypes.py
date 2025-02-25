@@ -38,6 +38,9 @@ class ModelConfig:
 
     def get_max_tokens(self, default=None) -> int | None | Any:
         return self.config.get("max_tokens", default)
+    
+    def get_extra_fields(self) -> Dict:
+        return self.config.get("extra_fields", {}) # Maybe should be None...
 
     def __repr__(self):
         return repr(

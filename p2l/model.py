@@ -293,7 +293,8 @@ def BA_loss(
 
 
 @register_loss("bag")
-def BAG_loss(
+@register_loss("grk")
+def GRK_loss(
     head_output: HeadOutputs, labels: Dict, weights: torch.Tensor = None, **kwargs
 ):
     # labels are (winner_idx, loser_idx, tie_indicator (0 for no tie, 1 for tie, 2 for tie both bad))
@@ -601,6 +602,7 @@ class BTAggrModel(nn.Module):
 @register_aggr_model("rk")
 @register_aggr_model("rk-reparam")
 @register_aggr_model("bag")
+@register_aggr_model("grk")
 class RKAggrModel(nn.Module):
     def __init__(self, num_models, batch_size=1):
         super().__init__()
@@ -746,6 +748,7 @@ def get_bag_probs(beta_win, beta_lose, gamma, theta):
 
 # batched
 @register_pairwise_loss("bag")
+@register_pairwise_loss("grk")
 def pairwise_batch_bag_loss(
     real_output: HeadOutputs,
     aggregated_output: HeadOutputs,
@@ -814,6 +817,7 @@ def RK_Tie_Loss(
 
 
 @register_loss("tie-bag")
+@register_loss("tie-grk")
 def bag_tie_loss(
     head_output: HeadOutputs, labels: Dict, weights: torch.Tensor = None, **kwargs
 ):
@@ -851,6 +855,7 @@ def bag_tie_loss(
 
 
 @register_loss("tie-bb-bag")
+@register_loss("tie-bb-grk")
 def bag_tie_bb_loss(
     head_output: HeadOutputs, labels: Dict, weights: torch.Tensor = None, **kwargs
 ):
