@@ -178,7 +178,7 @@ Serve an OpenAI compatible router with `python -m route.openai_server`. The avai
 |--------|-----------|-------------|
 | `--help` | `-h` | Show this help message and exit. |
 | `--config CONFIG` | `-c CONFIG` | Path to the configuration file. |
-| `--router-type ROUTER_TYPE` | - | Type of the router to use. Avaible types are `bt-endpoint` and `bag-endpoint`.|
+| `--router-type ROUTER_TYPE` | - | Type of the router to use. Available types are `bt-endpoint` and `bag-endpoint`.|
 | `--router-model-name ROUTER_MODEL_NAME` | - | Name of the router model. |
 | `--router-model-endpoint ROUTER_MODEL_ENDPOINT` | - | Endpoint URL for the router model. |
 | `--router-api-key ROUTER_API_KEY` | - | API key for the router authentication. |
