@@ -173,7 +173,7 @@ The correct P2L input would be:
 
 ## Serving an OpenAI Compatible Router
 
-Serve an OpenAI compatible router with `python -m router.openai_server`. The available arguments are shown below.
+Serve an OpenAI compatible router with `python -m route.openai_server`. The available arguments are shown below.
 
 | Option | Short Flag | Description |
 |--------|-----------|-------------|
@@ -241,7 +241,7 @@ Additionally, we allow for adjustment of the `cost` parameter. One natural choic
 Now, lets assume we put the above config content into `config.yaml`. To start the OpenAI compatible router we would run:
 
 ```bash
-python -m router.openai_server --config config.yaml --router-type bt-endpoint --router-model-endpoint http://0.0.0.0:10250 --router-api-key <your-api-key> --cost-optimizer optimal-lp --api-key <your-endpoint-api-key>
+python -m route.openai_server --config config.yaml --router-type bt-endpoint --router-model-endpoint http://0.0.0.0:10250 --router-api-key <your-api-key> --cost-optimizer optimal-lp --api-key <your-endpoint-api-key>
 ```
 
 Let's break down what this command means:
