@@ -123,11 +123,7 @@ class OpenAIChatHandler(BaseChatHandler):
             messages=messages,
             temperature=model_config.get_temp() if not temp else temp,
             top_p=model_config.get_top_p() if not top_p else top_p,
-            max_tokens=(
-                model_config.get_max_tokens(default=openai.NOT_GIVEN)
-                if not max_tokens
-                else max_tokens
-            ),
+            max_tokens=model_config.get_max_tokens(default=8192)
             stream=stream,
         )
 
@@ -400,7 +396,7 @@ class AnthropicChatHandler(BaseChatHandler):
             stop_sequences=[anthropic.HUMAN_PROMPT],
             temperature=model_config.get_temp() if not temp else temp,
             top_p=model_config.get_top_p() if not top_p else top_p,
-            max_tokens=model_config.get_max_tokens() if not max_tokens else max_tokens,
+            max_tokens=model_config.get_max_tokens(default=8192),
             system=system_message,
         )
 
@@ -450,7 +446,7 @@ class AnthropicChatHandler(BaseChatHandler):
             stop_sequences=[anthropic.HUMAN_PROMPT],
             temperature=model_config.get_temp() if not temp else temp,
             top_p=model_config.get_top_p() if not top_p else top_p,
-            max_tokens=model_config.get_max_tokens() if not max_tokens else max_tokens,
+            max_tokens=model_config.get_max_tokens(default=8192),
             system=system_message,
         ) as _stream:
 
