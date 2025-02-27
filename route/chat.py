@@ -123,7 +123,7 @@ class OpenAIChatHandler(BaseChatHandler):
             messages=messages,
             temperature=model_config.get_temp() if not temp else temp,
             top_p=model_config.get_top_p() if not top_p else top_p,
-            max_tokens=model_config.get_max_tokens(default=8192)
+            max_tokens=model_config.get_max_tokens(default=8192),
             stream=stream,
         )
 
