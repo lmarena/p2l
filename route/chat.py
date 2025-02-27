@@ -555,7 +555,7 @@ class GeminiChatHandler(BaseChatHandler):
     ) -> GenerateContentResponse | Iterator[GenerateContentResponse]:
 
         generation_config = genai.GenerationConfig(
-            max_output_tokens=model_config.get_max_tokens(default=8192) if not max_tokens else max_tokens,
+            max_output_tokens=model_config.get_max_tokens(default=8192),
             temperature=model_config.get_temp() if not temp else temp,
             top_p=model_config.get_top_p() if not top_p else top_p,
             top_k=model_config.get_top_k(),
