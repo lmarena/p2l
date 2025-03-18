@@ -390,6 +390,7 @@ class AnthropicChatHandler(BaseChatHandler):
             messages=messages, model_config=model_config
         )
 
+
         completion = client.messages.create(
             model=model_config.get_name(),
             messages=messages,
@@ -440,14 +441,33 @@ class AnthropicChatHandler(BaseChatHandler):
             messages=messages, model_config=model_config
         )
 
+        extra_field = model_config.get_extra_fields()
+
+        if "thinking" in extra_field and extra_field.get("thinking", False):
+            thinking = {
+                "thinking": "enabled",
+                "budget_tokens": extra_field["budget_tokens"],
+            }
+
+            top_p = anthropic.NOT_GIVEN
+            temp = anthropic.NOT_GIVEN
+
+        
+        else:
+            thinking = anthropic.NOT_GIVEN
+
+            temp = model_config.get_temp() if not temp else temp
+            top_p = model_config.get_top_p() if not top_p else top_p
+
         with client.messages.stream(
             model=model_config.get_name(),
             messages=messages,
             stop_sequences=[anthropic.HUMAN_PROMPT],
-            temperature=model_config.get_temp() if not temp else temp,
-            top_p=model_config.get_top_p() if not top_p else top_p,
+            temperature=temp,
+            top_p=top_p,
             max_tokens=model_config.get_max_tokens(default=8192),
             system=system_message,
+            thinking=thinking,
         ) as _stream:
 
             stream: MessageStream = _stream
@@ -671,7 +691,10 @@ class GeminiChatHandler(BaseChatHandler):
 
         for chunk in chunks:
 
-            logging_content += chunk.text
+            try:
+                logging_content += chunk.text
+            except Exception as e:
+                continue
 
             out_chunk = ChatCompletionResponseChunk(
                 id=chat_id,
