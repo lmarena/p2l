@@ -26,7 +26,7 @@ class ModelConfig:
 
         system_prompt = self.config.get("system_prompt", default)
 
-        if r"{{currentDateTime}}" in system_prompt:
+        if type(system_prompt) == str and r"{{currentDateTime}}" in system_prompt:
                 current_date = datetime.datetime.now().isoformat().split('T')[0]
                 system_prompt = system_prompt.replace(r"{{currentDateTime}}", current_date)
 
