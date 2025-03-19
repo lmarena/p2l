@@ -1,6 +1,7 @@
 from typing import Dict, List, Any, Optional
 from dataclasses import dataclass
 from pydantic import BaseModel
+import datetime
 from enum import Enum
 
 
@@ -22,7 +23,14 @@ class ModelConfig:
         return self.config.get("top_k", default)
 
     def get_system_prompt(self, default=None) -> str | None | Any:
-        return self.config.get("system_prompt", default)
+
+        system_prompt = self.config.get("system_prompt", default)
+
+        if r"{{currentDateTime}}" in system_prompt:
+                current_date = datetime.datetime.now().isoformat().split('T')[0]
+                system_prompt = system_prompt.replace(r"{{currentDateTime}}", current_date)
+
+        return system_prompt
 
     def get_api_key(self, default=None) -> str | None | Any:
         return self.config.get("api_key", default)
