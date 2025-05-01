@@ -1,0 +1,19 @@
+proj_name: Qwen2.5-1.5B-bag-chrono-eps-0.06-04302025
+learning_rate: 8.0e-6
+adam_epsilon: 1.0e-8
+batch_size: 4
+max_length: 16384
+num_train_epochs: 1
+train_data_path: naive_replay_buffer_eps_0.06
+val_data_path: p2el/canonical_bt_val_data_11092024
+output_dir: 'training_outputs'
+pretrain_model_name: Qwen/Qwen2.5-1.5B-Instruct
+gradient_accumulation_steps: 17 # drop to 32 since 8 gpus
+chat_template: "{%- if messages[0]['role'] == 'system' %}\n    {{- '<|im_start|>system\\n' + messages[0]['content'] + '<|im_end|>\\n' }}\n{%- endif %}\n{%- for message in messages %}\n    {%- if (message.role == \"user\") or (message.role == \"system\" and not loop.first) or (message.role == \"assistant\" and not message.tool_calls) %}\n        {{- '<|im_start|>' + message.role + '\\n' + message.content + '<|im_end|>' + '\\n' }}\n    {%- elif message.role == \"assistant\" %}\n        {{- '<|im_start|>' + message.role }}\n        {%- if message.content %}\n            {{- '\\n' + message.content }}\n        {%- endif %}\n        {%- for tool_call in message.tool_calls %}\n            {%- if tool_call.function is defined %}\n                {%- set tool_call = tool_call.function %}\n            {%- endif %}\n            {{- '\\n<tool_call>\\n{\"name\": \"' }}\n            {{- tool_call.name }}\n            {{- '\", \"arguments\": ' }}\n            {{- tool_call.arguments | tojson }}\n            {{- '}\\n</tool_call>' }}\n        {%- endfor %}\n        {{- '<|im_end|>\\n' }}\n    {%- elif message.role == \"tool\" %}\n        {%- if (loop.index0 == 0) or (messages[loop.index0 - 1].role != \"tool\") %}\n            {{- '<|im_start|>user' }}\n        {%- endif %}\n        {{- '\\n<tool_response>\\n' }}\n        {{- message.content }}\n        {{- '\\n</tool_response>' }}\n        {%- if loop.last or (messages[loop.index0 + 1].role != \"tool\") %}\n            {{- '<|im_end|>\\n' }}\n        {%- endif %}\n    {%- endif %}\n{%- endfor %}\n{%- if add_generation_prompt %}\n    {{- '<|im_start|>assistant\\n' }}\n{%- endif %}\n\n"
+model_type: "qwen2"
+head_type: "rk"
+loss_type: "bag"
+weighted_loss: false
+deepspeed_config_path: deepspeed/zero1.json
+init_type: reset_params
+load_train_data_from_disk: true
