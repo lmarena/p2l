@@ -68,8 +68,7 @@ def train_model(args):
 
     LOCAL_RANK = int(os.environ.get("LOCAL_RANK", -1))
 
-    if not os.path.exists(output_dir):
-        os.makedirs(output_dir)
+    os.makedirs(output_dir, exist_ok=True)
 
     # define project name
     if not proj_name:
