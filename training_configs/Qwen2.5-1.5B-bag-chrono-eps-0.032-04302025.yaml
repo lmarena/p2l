@@ -1,4 +1,4 @@
-proj_name: Qwen2.5-1.5B-bag-chrono-eps-0.032-04302025
+proj_name: Qwen2.5-1.5B-bag-chrono-eps-0.032-04302025-2
 learning_rate: 8.0e-6
 adam_epsilon: 1.0e-8
 batch_size: 1
