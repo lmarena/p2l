@@ -68,8 +68,7 @@ def train_model(args):
 
     LOCAL_RANK = int(os.environ.get("LOCAL_RANK", -1))
 
-    if not os.path.exists(output_dir):
-        os.makedirs(output_dir)
+    os.makedirs(output_dir, exist_ok=True)
 
     # define project name
     if not proj_name:
@@ -148,12 +147,15 @@ def train_model(args):
     train_data = get_dataset(
         train_data_path, "train", from_disk=load_train_data_from_disk
     )
-    val_data = get_dataset(val_data_path, "train", from_disk=load_val_data_from_disk)
 
-    with training_args.main_process_first():
+    if not args.no_eval:
+        val_data = get_dataset(val_data_path, "train", from_disk=load_val_data_from_disk)
 
-        model_list = get_model_list(train_data)
+    # with training_args.main_process_first():
 
+    model_list = get_model_list(train_data)
+
+    if not args.no_eval:
         val_model_list = get_model_list(val_data)
 
         if model_list != val_model_list:
@@ -207,7 +209,7 @@ def train_model(args):
         model=model,
         args=training_args,
         train_dataset=train_data.with_format("torch"),
-        eval_dataset=val_data.with_format("torch"),
+        # eval_dataset=val_data.with_format("torch"),
         data_collator=data_collator,
     )
 

@@ -1,5 +1,5 @@
 from transformers import PreTrainedTokenizer
-from datasets import Dataset, load_dataset, load_from_disk
+from datasets import Dataset, DatasetDict, load_dataset, load_from_disk
 import torch
 from typing import List
 
@@ -26,7 +26,11 @@ def get_model_list(dataset: Dataset):
 
 def get_dataset(path: str, split: str, from_disk=False):
     if from_disk:
-        dataset = load_from_disk(path)[split]
+        dataset = load_from_disk(path)
+
+        if isinstance(dataset, DatasetDict):
+        
+            dataset = dataset[split]
 
         return dataset
     else:
@@ -70,9 +74,19 @@ class DataCollator:
         self.max_length: int = max_length
         self.weight: bool = weight
         self.reweight_scale: float = reweight_scale
+        self.first = True
 
     def __call__(self, data):
-        prompts = [[{"role": "user", "content": seq["prompt"]}] for seq in data]
+
+        prompts = []
+
+        for seq in data:
+
+            if isinstance(seq["prompt"], str):
+                prompts.append([{"role": "user", "content": seq["prompt"]}])
+            else:
+                prompts.append([{"role": "user", "content": turn} for turn in seq["prompt"]])
+        
         labels = torch.tensor([seq["labels"].tolist() for seq in data])
 
         formatted_prompts = self.tokenizer.apply_chat_template(
@@ -91,6 +105,10 @@ class DataCollator:
         formatted_prompts = [
             seq + self.tokenizer.cls_token for seq in formatted_prompts
         ]
+
+        if self.first:
+            print(formatted_prompts)
+            self.first = False
 
         encoded = self.tokenizer(
             formatted_prompts,
